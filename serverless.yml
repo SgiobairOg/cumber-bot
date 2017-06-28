@@ -1,0 +1,21 @@
+#
+# Lambda function for the Benedictr (Cumber Bot) Alexa Skill
+# Authored by Jason Wilson @wilsonuponsea
+# https://www.wilsons.io
+#
+# Deployed with Serverless!
+#
+
+service: wilsonsio-benediction
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  profile: benedictr-aws
+  region: us-east-1
+
+functions:
+  benedictr:
+    handler: handler.benedictr
+    events:
+      - alexaSkill
