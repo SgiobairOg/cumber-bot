@@ -29,41 +29,47 @@ const getRandomName = ( source ) => {
 };
 
 //Set random name for the response
-let first = getRandomName(nameData.bwords);
-let last = getRandomName(nameData.cwords);
+let first = 'Benedict';
+let last = 'Cumberbatch';
+let languageStrings = {};
 
-
-const languageStrings = {
-  'en-US': {
-    translation: {
-      RESPONSES: [
-        `Are you thinking of ${first} ${last}?`,
-        `I think his name was ${first} ${last}.`,
-        `I love his work; ${first} ${last}, right?`,
-        `His name was something like ${first} ${last} wasn't it?`,
-        `I don't know, I only have eyes for Cage.`
-      ],
-      SKILL_NAME: 'Cumber Bot',
-      HELP_MESSAGE: 'You can ask who played smaug, who is the actor who played Khan, what is that one actor\'s name, or give me a name, or, you can say exit... What can I help you with?',
-      HELP_REPROMPT: 'What can I help you with?',
-      STOP_MESSAGE: `Goodbye! See you at the next ${last} movie!`
+const init = () => {
+  
+  first = getRandomName(nameData.bwords);
+  last = getRandomName(nameData.cwords);
+  
+  languageStrings = {
+    'en-US': {
+      translation: {
+        RESPONSES: [
+          `Are you thinking of ${first} ${last}?`,
+          `I think his name was ${first} ${last}.`,
+          `I love his work; ${first} ${last}, right?`,
+          `His name was something like ${first} ${last} wasn't it?`,
+          `I don't know, I only have eyes for Cage.`
+        ],
+        SKILL_NAME: 'Cumber Bot',
+        HELP_MESSAGE: 'You can ask who played smaug, who is the actor who played Khan, what is that one actor\'s name, or give me a name, or, you can say exit... What can I help you with?',
+        HELP_REPROMPT: 'What can I help you with?',
+        STOP_MESSAGE: `Goodbye! See you at the next ${last} movie!`
+      },
     },
-  },
-  'de-DE': {
-    translation: {
-      RESPONSES: [
-        `Denkst du an ${first} ${last}?`,
-        `Ich denke dass sein Name war ${first} ${last}.`,
-        `Ich leibe seine Arbeit; ${first} ${last}, richtig?`,
-        `Sein Name war so etwas wie ${first} ${last} war es nicht?`,
-        `Ich kenne nichts, Ich habe nur Augen für Nicholas Cage.`
-      ],
-      SKILL_NAME: 'Cumber Bot',
-      HELP_MESSAGE: 'Sie können fragen, wer Smaug gespielt hat, wer ist der Schauspieler, der Khan gespielt hat, was ist der Name eines Schauspielers, oder geben Sie mir einen Namen, oder Sie können sagen, Ausfahrt ... Was kann ich Ihnen helfen?',
-      HELP_REPROMPT: 'Womit kann ich dir helfen?',
-      STOP_MESSAGE: `Bis später! Ich werde dich am nächsten ${last} movie!`
-    },
-  }
+    'de-DE': {
+      translation: {
+        RESPONSES: [
+          `Denkst du an ${first} ${last}?`,
+          `Ich denke dass sein Name war ${first} ${last}.`,
+          `Ich leibe seine Arbeit; ${first} ${last}, richtig?`,
+          `Sein Name war so etwas wie ${first} ${last} war es nicht?`,
+          `Ich kenne nichts, Ich habe nur Augen für Nicholas Cage.`
+        ],
+        SKILL_NAME: 'Cumber Bot',
+        HELP_MESSAGE: 'Sie können fragen, wer Smaug gespielt hat, wer ist der Schauspieler, der Khan gespielt hat, was ist der Name eines Schauspielers, oder geben Sie mir einen Namen, oder Sie können sagen, Ausfahrt ... Was kann ich Ihnen helfen?',
+        HELP_REPROMPT: 'Womit kann ich dir helfen?',
+        STOP_MESSAGE: `Bis später! Ich werde dich am nächsten ${last} movie!`
+      },
+    }
+  };
 };
 
 // Given a specification object return a weighted random value
@@ -90,14 +96,15 @@ const handlers = {
   },
   'GetAName': function () {
     
+    init();
+    
     // Select response from the Response data
     const responseList    = this.t('RESPONSES');
     const responsePointer = weightedRandom({0: 0.25, 1: 0.25, 2: 0.25, 3: 0.15, 4: 0.1});
     const randomNamePhrase      = responseList[responsePointer];
     
     this.emit(':tellWithCard', randomNamePhrase, this.t('SKILL_NAME'), randomNamePhrase);
-    first = getRandomName(nameData.bwords);
-    last = getRandomName(nameData.cwords);
+    
   },
   'AMAZON.HelpIntent': function () {
     const speechOutput = this.t('HELP_MESSAGE');
